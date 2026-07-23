@@ -1,9 +1,9 @@
 name: CI
 
 on:
+  # Scheduled refreshes arrive as `workflow_dispatch` from scheduled-deploy.yml,
+  # because Void's OIDC deploy rejects the `schedule` event as a trigger.
   workflow_dispatch:
-  schedule:
-    - cron: "0 */3 * * *" # Build and deploy every 3 hours.
   pull_request:
     types:
       - opened
@@ -25,19 +25,19 @@ permissions: {}
 jobs:
   check:
     name: Check
-    if: github.event_name != 'schedule'
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: taiki-e/checkout-action@7d1e50e93dc4fb3bba58f85018fadf77898aee8b # v1.4.2
       - uses: oxc-project/setup-node@4c588e9266bd930b6ddc34307df0659ed511d187 # v1.3.1
       - run: pnpm fmt --check
-      - uses: crate-ci/typos@37bb98842b0d8c4ffebdb75301a13db0267cef89 # v1.47.2
+      - uses: crate-ci/typos@bee27e3a4fd1ea2111cf90ab89cd076c870fce14 # v1.48.0
         with:
           files: .
 
   check-linter-rules:
     name: Check linter rules up-to-date
-    if: github.event_name != 'schedule'
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -55,8 +55,8 @@ jobs:
     environment: ${{ github.ref_name == 'main' && 'void' || '' }}
     env:
       SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      VOID_TOKEN: ${{ secrets.VOID_TOKEN }}
     permissions:
+      id-token: write
       pull-requests: write
       contents: write
     steps:
@@ -110,7 +110,7 @@ jobs:
           cat deploy_output.json
 
       - name: Deploy to Void
-        if: env.VOID_TOKEN && github.ref_name == 'main'
+        if: github.ref_name == 'main'
         run: pnpm exec void deploy --skip-build
         env:
           VOID_PROJECT: oxc-playground
