@@ -48,6 +48,7 @@ if (existsSync(COMMIT_FILE)) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  test: { clearMocks: false },
   lint: {
     plugins: ["typescript", "unicorn", "oxc", "import", "jsdoc", "promise", "node"],
     jsPlugins: [
