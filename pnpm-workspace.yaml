@@ -27,4 +27,13 @@ allowBuilds:
   workerd: false
 overrides:
   esbuild: 0.28.0
+  vite@*: 'catalog:'
 packages:
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@0.0.0-commit.824e84de80cbc1af30829ed024a4158d416dbad3
+  vite-plus: 0.0.0-commit.824e84de80cbc1af30829ed024a4158d416dbad3
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: '*'
