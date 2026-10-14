@@ -1,5 +1,11 @@
 verifyDepsBeforeRun: install
 minimumReleaseAgeExclude:
+  # ecosystem-ci smoke test: preview builds and freshly pinned toolchain packages
+  - tinybench
+  - yuku-core
+  - yuku-parser
+  - "@yuku-core/*"
+  - "@yuku-toolchain/*"
   - "@oxc-parser/*"
   - "@oxc-project/*"
   - "@oxfmt/*"
