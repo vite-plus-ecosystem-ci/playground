@@ -1,5 +1,11 @@
 verifyDepsBeforeRun: install
 minimumReleaseAgeExclude:
+  # ecosystem-ci smoke test: preview builds and freshly pinned toolchain packages
+  - tinybench
+  - yuku-core
+  - yuku-parser
+  - "@yuku-core/*"
+  - "@yuku-toolchain/*"
   - "@oxc-parser/*"
   - "@oxc-project/*"
   - "@oxfmt/*"
@@ -27,4 +33,13 @@ allowBuilds:
   workerd: false
 overrides:
   esbuild: 0.28.0
+  vite@*: "catalog:"
 packages:
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@0.0.0-commit.3b99001a24f162be6a4478c3b97f3d0eb81c96c8
+  vite-plus: 0.0.0-commit.3b99001a24f162be6a4478c3b97f3d0eb81c96c8
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: "*"
